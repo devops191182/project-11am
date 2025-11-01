@@ -5,7 +5,7 @@
   gather_facts: no
 
   vars:
-    bucket_name: "10.30cicd-jenkins"
+    bucket_name: "10.30cicd-jenkins01"
     region: "us-east-1"
 
   tasks:
