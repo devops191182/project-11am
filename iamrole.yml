@@ -1,0 +1,33 @@
+---
+- name: Create IAM Role
+  hosts: localhost
+  connection: local
+  gather_facts: no
+
+  vars:
+    role_name: my-ansible-iam-role1
+    assume_role_policy:
+      Version: "2012-10-17"
+      Statement:
+        - Effect: Allow
+          Principal:
+            Service: ec2.amazonaws.com
+          Action: sts:AssumeRole
+
+  tasks:
+
+    - name: Create IAM role
+      community.aws.iam_role:
+        name: "{{ role_name }}"
+        assume_role_policy_document: "{{ assume_role_policy | to_json }}"
+        state: present
+        description: "IAM role created using Ansible"
+        managed_policy:
+          - arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess
+          - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
+      register: iam_role_result
+
+    - name: Output IAM role info
+      debug:
+        var: iam_role_result
+
