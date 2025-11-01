@@ -1,21 +1,26 @@
 ---
-- name: Create S3 Bucket
+- name: Create an S3 bucket with versioning enabled
   hosts: localhost
   connection: local
   gather_facts: no
 
+  collections:
+    - amazon.aws
+
   vars:
-    bucket_name: "10.30cicd-jenkins01"
-    region: "us-east-1"
+    aws_region: "us-east-1"
+    s3_bucket_name: "s3-cicid-jenkis11"  # must be globally unique
 
   tasks:
-    - name: Create an S3 bucket
+    - name: Create S3 bucket
       amazon.aws.s3_bucket:
-        bucket: "{{ bucket_name }}"
-        mode: create
-        region: "{{ region }}"
-        acl: private
-        versioning: true
-        tags:
-          Environment: "Dev"
-          Owner: "Ansible"
+        name: "{{ s3_bucket_name }}"
+        state: present
+        region: "{{ aws_region }}"
+        versioning:
+          status: Enabled
+      register: s3_result
+
+    - name: Show result
+      debug:
+        var: s3_result
