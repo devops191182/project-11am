@@ -1,0 +1,25 @@
+---
+- name: Create a Pod in Kubernetes
+  hosts: all
+  gather_facts: no
+  collections:
+    - community.kubernetes
+
+  tasks:
+    - name: Create a simple nginx pod
+      k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: Pod
+          metadata:
+            name: sum-pod
+            namespace: default
+          spec:
+            containers:
+              - name: anjali-cont-01
+                image: ubuntu:latest
+                command: ["sleep", "3600"]
+              - name: shivani-cont-02
+                image: ubuntu:latest
+                command: ["sleep", "3600"]
